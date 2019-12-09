@@ -1,0 +1,9 @@
+connect target /
+
+run {
+	allocate channel D1 type disk;
+
+	backup archivelog 
+		sequence 93
+		format '/oracle/backup/TESTDB/arch_%d_%T_%s_%p';
+}

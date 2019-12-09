@@ -1,0 +1,14 @@
+connect target /@BACKUP
+
+run {
+
+	backup database;
+	backup validate database;
+	restore database validate;
+
+	delete noprompt obsolete;
+
+	release channel D1;
+}
+
+delete noprompt obsolete ;

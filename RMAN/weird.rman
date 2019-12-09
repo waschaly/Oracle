@@ -1,0 +1,14 @@
+connect target / ;
+
+crosscheck backupset completed before 'sysdate-5';
+delete noprompt obsolete;
+
+run {
+	allocate channel D1 type disk format '/home1/oracle/rman/bk_%d_%T_%s_%p';
+	allocate channel D2 type disk format '/home1/oracle/rman/bk_%d_%T_%s_%p';
+
+	backup database plus archivelog delete input;
+
+	release channel D1;
+	release channel D2;
+}

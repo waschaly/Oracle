@@ -1,0 +1,5 @@
+connect target /
+crosscheck backupset completed before 'sysdate-5';
+delete noprompt obsolete;
+shutdown immediate
+startup mount;

@@ -1,0 +1,7 @@
+connect target /
+
+run {
+
+	backup as backupset copy of database;
+
+}

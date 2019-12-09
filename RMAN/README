@@ -1,0 +1,88 @@
+do_backup.sh kann fuer alle Sicherungsverfahren verwendet werden 
+
+	1) fuer ArchiveLogs
+	2) fuer OnlineBackups
+	3) fuer OfflineBackups
+
+Alle Incrementlevel sind noch nicht getestet sollten aber bei richtiger Syntax des
+(Betriebssystem)Links kein Problem sein.
+
+Jeder Modus ist in 3 Phasen unterteilt. 
+
+	1) Pre
+	2) Backup 
+	3) Post
+
+Diese 3 Phasen sind dazu gedacht um notwendige Vor- und Nacharbeiten, die fuer ein
+Backup notwendig sein können, durchzuführen.
+
+Das Pre- und die Postphase duerfen entfallen, die Backupphase nicht.
+
+
+
+
+
+Vorbereitung:
+- Das Verzeichnis $ORACLE_BASE/rman muss existieren. in diesem Verzeichniss muessen die 
+  mitgelieferten Files 'do_backup.sh' und 'settings' deponiert werden.
+- Das originale File do_backup.sh muss auf das eigentliche BackupFile gelinkt werden. Bitte
+  NICHT kopieren oder Symlink verwenden. 
+
+  Beispiel FileNameSyntax:
+  - ln do_backup.sh do_online_tape.sh
+  - ln do_backup.sh do_offline_tape.sh
+  - ln do_backup.sh do_online_disk.sh
+  - ln do_backup.sh do_archive_tape.sh 
+  - ...
+
+- Beim Dateinamen ist auf die Syntax zu achten
+  
+  do_<methode>_<device>.sh
+
+  Da der Underscore '_' im Script als Trennzeichen  verwendet wird ist bei der Methode
+  <methode> ein Underscore kein valides Zeichen. Der Filename do_inc_0_disk.sh wuerde Fehler
+  produzieren deswegen bitte do_inc0_disk.sh oder do_inc-0_disk.sh.
+
+- Der Instanzname muss in die Variable INSTANCE eingepflegt werden
+  - Gibt es die Möglichkeit das Backupskript mit Kommandlineparameter zu starten gibt es die
+	Möglichkeit mit dem Flag -i <INSTANZ> den Instanznamen zur Laufzeit zu setzen. 
+
+- Die Variable ORACLE_USER muss auf den Eigentuemer der Oracleinstanz gesetzt werden.
+
+
+
+
+
+RMAN-Files:
+Je nachdem wie das Shellskript heisst wird versucht ein *.rman auszuführen
+Heisst das Backupshellskript do_online_disk.sh wird versucht das RMAN-Skript
+backup_online_disk.rman auszufuehren. 
+
+- Existiert das Skript backup_online_disk_pre.rman wird dieses VOR dem backup_online_disk.rman
+ausgefuehrt.
+- Existiert das Skript backup_online_disk_post.rman wird dieses NACH dem backup_online_disk.rman
+ausgefuehrt.
+
+
+
+
+
+KommandLineParameter:
+
+	-d	setzt das BackupDevice
+	-i	setzt den InstanzNamen
+	-u	setzt den ORACLE_USER
+	-v	setzt den DebugMode 
+
+Die KommandLineParameter haben Vorrang !!
+
+
+
+
+Directories:
+ - Im Verzeichniss $RMANBASE/rman/logs werden die die Bildschirmausgaben abgelegt. Ein
+   automatisches Loeschen oder archivieren findet nicht statt. 
+   Existiert das ./logs Verzeichniss zum ersten Lauf nicht wird es automatisch erstellt. 
+ - Im Verzeichniss $RMANBASE/rman/examples findest Du ein paar rman Skripte 
+ - DIESE SKRIPTE MUESSEN DEN LOKALEN GEGEBENHEITEN ANGEPASST WERDEN. 
+

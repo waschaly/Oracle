@@ -1,0 +1,2 @@
+connect target /
+alter database open;

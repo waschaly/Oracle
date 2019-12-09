@@ -1,0 +1,3 @@
+connect target /@BACKUP;
+
+crosscheck backupset completed before 'sysdate-5';

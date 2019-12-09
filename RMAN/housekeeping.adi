@@ -1,0 +1,33 @@
+#
+## Incidents aus dem Listener- und alert.log
+#
+set homes diag/rdbms/testdb/TESTDB diag/tnslsnr/cetesien/testdb
+show incident
+#
+## zum Loeschen home setzen
+#
+set home diag/rdbms/testdb/TESTDB
+# 
+## loeschen der TRACEs > 30 Tage
+## loeschen der CDUMPs > 30 Tage
+## loeschen der ALERTs > 90 Tage
+#
+purge -age 43200 -type TRACE
+purge -age 43200 -type CDUMP
+purge -age 129600 -type ALERT
+
+
+
+set home diag/asm/+asm/+ASM
+
+purge -age 43200 -type TRACE
+purge -age 43200 -type CDUMP
+purge -age 129600 -type ALERT
+
+
+
+set home diag/tnslsnr/cetesien/testdb
+
+purge -age 43200 -type TRACE
+purge -age 43200 -type CDUMP
+purge -age 129600 -type ALERT

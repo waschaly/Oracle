@@ -1,0 +1,26 @@
+connect target sys/or10cle@PROD;
+# connect target /@BACKUP;
+
+run {
+
+	# allocate channel D1
+		# type disk 
+		# format '/oracle/backup/PROD/bk_%d_%T_%s_%p' 
+		# maxpiecesize=512M;
+	# allocate channel D2 
+		# type disk 
+		# format '/oracle/backup/PROD/bk_%d_%T_%s_%p' 
+		# maxpiecesize=512M;
+
+	backup (
+		archivelog all delete input
+		# filesperset=2
+		FORMAT '/oracle/backup/PROD/arch_%d_%T_%s_%p'
+	);
+
+	# release channel D1;
+	# release channel D2;
+
+}
+
+delete noprompt obsolete ;

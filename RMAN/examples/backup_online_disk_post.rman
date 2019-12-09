@@ -1,0 +1,10 @@
+connect target sys/or10cle@BACKUP;
+
+run {
+
+	allocate channel D1 type disk;
+
+	backup validate database;
+
+	release channel D1;
+}

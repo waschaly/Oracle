@@ -1,0 +1,26 @@
+connect target /
+
+CONFIGURE CONTROLFILE AUTOBACKUP ON;
+CONFIGURE RETENTION POLICY TO REDUNDANCY 5;
+
+run {
+
+	# allocate channel D1
+		# type disk 
+		# format '/oracle/backup/PROD/bk_%d_%T_%s_%p' 
+		# maxpiecesize=512M;
+	# allocate channel D2 
+		# type disk 
+		# format '/oracle/backup/PROD/bk_%d_%T_%s_%p' 
+		# maxpiecesize=512M;
+
+	backup
+		database
+		plus archivelog 
+		delete input
+		filesperset=1;
+
+	# release channel D1;
+	# release channel D2;
+
+}

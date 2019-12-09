@@ -1,0 +1,5 @@
+connect target sys/or11cle@BACKUP;
+
+backup validate database;
+restore database validate;
+delete noprompt obsolete;

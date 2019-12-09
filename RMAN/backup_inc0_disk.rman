@@ -1,0 +1,18 @@
+# connect target /@BACKUP;
+connect target sys/or10cle@PROD;
+
+run {
+
+	backup
+		incremental level=0 database
+		plus archivelog 
+		delete all input
+		# filesperset=1
+	;
+
+	backup 
+		current controlfile
+	;
+
+	delete obsolete;
+}

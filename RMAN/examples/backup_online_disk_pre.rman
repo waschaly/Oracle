@@ -1,0 +1,5 @@
+connect target / 
+
+allocate channel for maintenance type disk;
+crosscheck backupset completed before 'sysdate-5';
+delete noprompt obsolete;

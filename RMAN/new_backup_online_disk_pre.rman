@@ -1,0 +1,3 @@
+connect target sys/or10cle;
+
+delete noprompt obsolete ;

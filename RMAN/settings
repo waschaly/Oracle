@@ -1,0 +1,97 @@
+#
+## Please use this file as a configuration file for your Oracle-RMAN backups only
+## Author: Wolf-Agathon Schaly
+## (C) 2009, 2010, 2011, 2012
+#
+
+#
+##
+## some system commands 
+##
+#
+AWK=`type -p awk`
+CAT=`type -p cat`
+CUT=`type -p cut`
+GREP=`type -p grep`
+LS=`type -p ls`
+MKDIR=`type -p mkdir`
+MV=`type -p mv`
+PS=`type -p ps`
+RM=`type -p rm`
+SED=`type -p sed`
+TAR=`type -p tar`
+TOUCH=`type -p touch`
+
+# 
+##
+## Please define ${INSTANCE} in your mainscript
+## If ${INSTANCE} is not defined via commandline parameter you should define the Instancename here
+## BEWARE: 
+## The script is designed to be used from multiple Oracle Database Instances 
+##
+#
+ORACLE_SID=${INSTANCE}
+#
+## Only the next block needs your configuration
+##
+# START HERE
+ORATAB=/etc/oratab
+ORACLE_USER=oracle
+ORACLE_HOME=`${CAT} ${ORATAB} | ${GREP} ${INSTANCE} | ${AWK} -F: '{print $2}'`
+ORACLE_BASE=`echo ${ORACLE_HOME} | ${SED} -e 's:\(.*\)/.*:\1:g'`
+NLS_DATE_FORMAT='YYYY-MM-DD HH24:MI:SS' 
+
+export ORACLE_SID ORACLE_BASE ORACLE_HOME NLS_DATE_FORMAT DEBUG
+#
+# STOP HERE
+#
+
+# no further configuration needed beyond this line 
+# !!!!  BUT: Please make sure that the directory ${RMANBASE} exists <<< !!!!!!!!!!!!
+#
+## RMAN Definitionen
+#
+RMAN=${ORACLE_HOME}/bin/rman
+RMANBASE=`pwd`
+RMANLOGS=${RMANBASE}/logs
+RMANDATE=`date "+%Y%m%d_%H%M%S"`
+RMAN_SCRIPTEXTENSION=rman
+
+#
+##
+## RMAN Scriptnamen
+##
+#
+RMAN_FILE=backup_${BACKUP_NAME}
+RMANLOGF=${RMANLOGS}/${RMAN_FILE}_${RMANDATE}
+RMAN_PRE_SCRIPT=${RMAN_FILE}_${BACKUP_DEVICE}_pre.${RMAN_SCRIPTEXTENSION}
+RMAN_SCRIPT=${RMAN_FILE}_${BACKUP_DEVICE}.${RMAN_SCRIPTEXTENSION}
+RMAN_POST_SCRIPT=${RMAN_FILE}_${BACKUP_DEVICE}_post.${RMAN_SCRIPTEXTENSION}
+
+#
+##
+## ADRCI settings
+##
+#
+ADRCI=${ORACLE_HOME}/bin/adrci
+ADRCI_SCRIPT=${RMANBASE}/housekeeping.adi
+ADRCI_LOG=${RMANLOGS}/adrci_${RMANDATE}
+
+#
+##
+## some general setting
+##
+#
+CUR_YEAR=`date "+%Y"`
+CUR_MONTH=`date "+%m"`
+TARFILE_EXTENSION="tar"
+ARCHIVE_DIR=${RMANLOGS}/archive
+ARCHIVE_FILE=${ARCHIVE_DIR}/log_backup_${CUR_YEAR}${CUR_MONTH}.${TARFILE_EXTENSION}
+
+#
+##
+## PIDfile stuff
+##
+#
+PIDDIR=${RMANBASE}/run/${INSTANCE}
+PIDFILE=${INSTANCE}.pid
