@@ -1,2 +1,0 @@
-connect target sys/or10cle@PROD;
-connect auxiliary sys/or10cle@YPROD;
